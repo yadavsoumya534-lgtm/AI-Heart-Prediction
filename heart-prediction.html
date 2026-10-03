@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Heart Health Check</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --sidebar-bg: #0f172a;
+            --sidebar-text: #94a3b8;
+            --sidebar-active-bg: #1e293b;
+            --sidebar-active-text: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR STYLES --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 24px 16px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-brand-link {
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 32px;
+            display: block;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-circle {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .brand-info h2 {
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .brand-info h3 {
+            font-size: 0.75rem;
+            color: var(--sidebar-text);
+            font-weight: 400;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-grow: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .menu-item:hover {
+            background-color: var(--sidebar-active-bg);
+            color: white;
+        }
+
+        .menu-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: #f87171;
+        }
+
+        .logout-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* --- MAIN CONTENT WORKSPACE --- */
+        .main-workspace {
+            margin-left: 260px;
+            flex-grow: 1;
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            padding: 32px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .form-header i {
+            font-size: 2.2rem;
+            color: var(--danger);
+            margin-bottom: 8px;
+        }
+
+        .form-header h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: var(--text-main);
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        .form-section {
+            background: #fafafa;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: var(--primary);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .required {
+            color: var(--danger);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            background-color: #fff;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .help-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Responsive Sidebar Strategy */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                position: relative;
+                padding: 16px;
+            }
+            .main-workspace {
+                margin-left: 0;
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-brand-link" id="brandLink">
+            <div class="sidebar-brand">
+                <div class="logo-circle"><i class="fa-solid fa-notes-medical"></i></div>
+                <div class="brand-info">
+                    <h2>Predictive</h2>
+                    <h3>Healthcare Analysis</h3>
+                </div>
+            </div>
+        </a>
+
+        <nav class="sidebar-menu">
+            <a href="dashboard.html" class="menu-item"><i class="fa-solid fa-border-all"></i> <span class="nav-text">Dashboard</span></a>
+            <a href="heart-prediction.html" class="menu-item active"><i class="fa-solid fa-user-doctor"></i> <span class="nav-text">Health Prediction</span></a>
+            <a href="my-history.html" class="menu-item"><i class="fa-solid fa-clock-rotate-left"></i> <span class="nav-text">My History</span></a>
+            <a href="health-records.html" class="menu-item"><i class="fa-solid fa-folder-medical"></i> <span class="nav-text">Health Records</span></a>
+            <a href="charts-trends.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">Charts & Trends</span></a>
+            <a href="recommendations.html" class="menu-item"><i class="fa-solid fa-heart-circle-check"></i> <span class="nav-text">Recommendations</span></a>
+            <a href="profile-settings.html" class="menu-item"><i class="fa-solid fa-gear"></i> <span class="nav-text">Patient Profile</span></a>
+            
+            <a href="index.html" class="menu-item logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="nav-text">Logout</span></a>
+        </nav>
+    </aside>
+
+    <!-- MAIN FORM AREA -->
+    <main class="main-workspace">
+        <div class="container">
+            <header class="form-header">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <h1>Heart Health Risk Assessment</h1>
+                <p>Fill out these simple health details to check your heart risk score.</p>
+            </header>
+
+            <form id="heartRiskForm" novalidate onsubmit="handleFormSubmit(event)">
+                
+                <!-- SECTION 1 -->
+                <section class="form-section">
+                    <div class="section-title">
+                        <i class="fa-regular fa-user"></i>
+                        <span>1. Personal Information</span>
+                    </div>
+
+                    <div class="grid-layout">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" name="name" class="form-control" placeholder="e.g. John Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Age (Years) <span class="required">*</span></label>
+                            <input type="number" name="age" class="form-control" placeholder="e.g. 45" min="1" max="120" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Biological Sex <span class="required">*</span></label>
+                            <select name="gender" class="form-control" required>
+                                <option value="" disabled selected>Select option</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2 -->
+                <section class="form-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <span>2. Medical & Vital Details</span>
+                    </div>
+
+                    <div class="grid-layout">
+                        <div class="form-group">
+                            <label>Chest Discomfort Type <span class="required">*</span></label>
+                            <select name="chestPainType" class="form-control" required>
+                                <option value="" disabled selected>Select discomfort level</option>
+                                <option value="0">Severe Pain with Exercise (Typical Angina)</option>
+                                <option value="1">Mild Chest Pain (Atypical Angina)</option>
+                                <option value="2">Non-Heart Related Chest Pain</option>
+                                <option value="3">No Pain (Asymptomatic)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Resting Blood Pressure <span class="required">*</span></label>
+                            <input type="number" name="restingBP" class="form-control" placeholder="e.g. 120 mm Hg" required>
+                            <span class="help-text">Normal is around 120 mm Hg</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cholesterol Level <span class="required">*</span></label>
+                            <input type="number" name="cholesterol" class="form-control" placeholder="e.g. 200 mg/dl" required>
+                            <span class="help-text">Desirable is under 200 mg/dl</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fasting Blood Sugar <span class="required">*</span></label>
+                            <select name="fastingBloodSugar" class="form-control" required>
+                                <option value="" disabled selected>Select status</option>
+                                <option value="0">Normal (Below 120 mg/dl)</option>
+                                <option value="1">High (Above 120 mg/dl)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Highest Heart Rate Recorded <span class="required">*</span></label>
+                            <input type="number" name="maxHeartRate" class="form-control" placeholder="e.g. 150 bpm" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Chest Pain During Exercise? <span class="required">*</span></label>
+                            <select name="exerciseAngina" class="form-control" required>
+                                <option value="" disabled selected>Select answer</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3 -->
+                <section class="form-section">
+                    <div class="section-title">
+                        <i class="fa-solid fa-notes-medical"></i>
+                        <span>3. Lab & Test Results</span>
+                    </div>
+
+                    <div class="grid-layout">
+                        <div class="form-group">
+                            <label>Resting ECG Results <span class="required">*</span></label>
+                            <select name="restingECG" class="form-control" required>
+                                <option value="" disabled selected>Select ECG Result</option>
+                                <option value="0">Normal</option>
+                                <option value="1">Minor Wave Abnormality</option>
+                                <option value="2">Thickened Heart Muscle (Hypertrophy)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Exercise Stress Test Score <span class="required">*</span></label>
+                            <input type="number" step="0.1" name="oldpeak" class="form-control" placeholder="e.g. 1.0" required>
+                            <span class="help-text">ST depression value (default is usually 0 to 2.5)</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Stress Test Slope <span class="required">*</span></label>
+                            <select name="slope" class="form-control" required>
+                                <option value="" disabled selected>Select Slope</option>
+                                <option value="1">Improving (Upsloping)</option>
+                                <option value="2">Steady (Flat)</option>
+                                <option value="3">Decreasing (Downsloping)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Colored Blood Vessels (0-3) <span class="required">*</span></label>
+                            <select name="majorVessels" class="form-control" required>
+                                <option value="" disabled selected>Select Count</option>
+                                <option value="0">0 Vessels</option>
+                                <option value="1">1 Vessel</option>
+                                <option value="2">2 Vessels</option>
+                                <option value="3">3 Vessels</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Blood Flow Status <span class="required">*</span></label>
+                            <select name="thalassemia" class="form-control" required>
+                                <option value="" disabled selected>Select Status</option>
+                                <option value="1">Normal Blood Flow</option>
+                                <option value="2">Fixed Reduced Flow</option>
+                                <option value="3">Reversible Blockage</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-heart-pulse"></i> Calculate Heart Health Risk
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- JS SCRIPT ATTACHMENT -->
+    <script src="script.js"></script>
+</body>
+</html>

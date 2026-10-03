@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Recommendations - HealthPredict AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .rec-card { background: white; padding: 1.5rem; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.2s; }
+        .rec-card:hover { transform: translateY(-2px); }
+        .rec-card i { font-size: 2rem; margin-bottom: 1rem; display: block; }
+        
+        /* Doctor Alert Banners */
+        .risk-alert { padding: 1.25rem; border-radius: 8px; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; font-size: 0.95rem; line-height: 1.5; }
+        .alert-high { background: #fee2e2; border-left: 4px solid #ef4444; color: #991b1b; }
+        .alert-moderate { background: #fef3c7; border-left: 4px solid #f59e0b; color: #92400e; }
+        .alert-low { background: #dcfce7; border-left: 4px solid #10b981; color: #15803d; }
+        
+        /* Tint variations for cards */
+        .color-red { color: #ef4444; }
+        .color-orange { color: #f59e0b; }
+        .color-green { color: #10b981; }
+        .color-blue { color: #3b82f6; }
+    </style>
+</head>
+<body class="dashboard-page recommendations-page">
+    <div class="dashboard-wrapper">
+        <!-- STANDARD CLINICAL SIDEBAR -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-brand-link" id="brandLink">
+                <div class="sidebar-brand">
+                    <div class="logo-circle"><i class="fa-solid fa-notes-medical"></i></div>
+                    <div class="brand-info">
+                        <h2>Predictive</h2>
+                        <h3>Healthcare Analysis</h3>
+                    </div>
+                </div>
+            </a>
+
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="menu-item"><i class="fa-solid fa-grid-2"></i> <span class="nav-text">Dashboard</span></a>
+                <a href="heart-prediction.html" class="menu-item"><i class="fa-solid fa-user-doctor"></i> <span class="nav-text">Health Prediction</span></a>
+                <a href="my-history.html" class="menu-item"><i class="fa-solid fa-clock-rotate-left"></i> <span class="nav-text">My History</span></a>
+                <a href="health-records.html" class="menu-item"><i class="fa-solid fa-folder-medical"></i> <span class="nav-text">Health Records</span></a>
+                <a href="charts-trends.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">Charts & Trends</span></a>
+                <a href="recommendations.html" class="menu-item active"><i class="fa-solid fa-heart-circle-check"></i> <span class="nav-text">Recommendations</span></a>
+                <a href="profile-settings.html" class="menu-item"><i class="fa-solid fa-gear"></i> <span class="nav-text">Patient Profile</span></a>
+                <a href="index.html" class="menu-item logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="nav-text">Logout</span></a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <div class="user-greeting">
+                    <h1>Your Simple Health Guide</h1>
+                    <p>Easy-to-follow daily tips automatically updated based on your latest AI health check.</p>
+                </div>
+            </header>
+
+            <div id="riskAlertContainer"></div>
+            
+            <h2 style="font-size: 1.3rem; color: var(--text-dark); font-weight: 700; margin-top: 1rem;">Recommended Action Plan</h2>
+            <div class="rec-grid" id="recGrid"></div>
+        </main>
+    </div>
+
+    <!-- SCRIPT ENGINE: EASY-TO-READ PATIENT ADVICE -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const history = JSON.parse(localStorage.getItem('healthHistory')) || [];
+            const recGrid = document.getElementById('recGrid');
+            const alertContainer = document.getElementById('riskAlertContainer');
+
+            if (!recGrid || !alertContainer) return;
+
+            const aiHistory = history.filter(record => record.isManual !== true);
+
+            if (aiHistory.length === 0) {
+                alertContainer.innerHTML = `
+                    <div class="risk-alert alert-moderate">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div><strong>No Health Checks Found:</strong> Please go to the Health Prediction page and run a test so we can give you personalized advice.</div>
+                    </div>`;
+                recGrid.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 2rem;">Waiting for your test results...</p>`;
+                return;
+            }
+
+            const latest = aiHistory[0];
+            const score = latest.score;
+            
+            let alertHTML = "";
+            let prescriptions = [];
+
+            // ==========================================================================
+            // CASE 1: HIGH RISK (Score > 60%)
+            // ==========================================================================
+            if (score > 60) {
+                alertHTML = `
+                    <div class="risk-alert alert-high">
+                        <i class="fa-solid fa-triangle-exclamation" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Attention Needed (High Risk - ${score}%):</strong> 
+                            Your latest test shows extra stress on your heart. We strongly recommend booking an appointment with a heart doctor (cardiologist) to review your numbers.
+                        </div>
+                    </div>`;
+
+                prescriptions = [
+                    { title: "Track Your Vitals Daily", icon: "fa-heart-pulse", color: "color-red", desc: "Check and write down your blood pressure and heart rate every morning and evening. If your top blood pressure number stays above 140, call a doctor right away." },
+                    { title: "Eat Less Salt", icon: "fa-apple-whole", desc: "Cut back on salt in your food. Aim for less than 1,500 mg of salt per day to reduce water retention and lower strain on your blood vessels." },
+                    { title: "Take Exercise Easy", icon: "fa-person-walking-with-cane", desc: "Avoid heavy or exhausting workouts. Stick to light, slow walks for 15 to 20 minutes to keep moving without overworking your heart." },
+                    { title: "Get Recommended Medical Tests", icon: "fa-file-medical", desc: "Ask your doctor about getting an ECG (heart tracing test) and a full blood cholesterol test to check how your heart and arteries are doing." }
+                ];
+            } 
+            // ==========================================================================
+            // CASE 2: MODERATE RISK (Score 30% - 60%)
+            // ==========================================================================
+            else if (score >= 30 && score <= 60) {
+                alertHTML = `
+                    <div class="risk-alert alert-orange">
+                        <i class="fa-solid fa-circle-exclamation" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Take Precaution (Moderate Risk - ${score}%):</strong> 
+                            We noticed slight variations in your blood pressure or blood sugar. Making small, healthy daily choices now can easily bring your numbers back on track.
+                        </div>
+                    </div>`;
+
+                prescriptions = [
+                    { title: "Get Regular Light Cardio", icon: "fa-person-running", color: "color-orange", desc: "Try to get 30 minutes of simple exercise (like brisk walking or easy cycling) 5 days a week to keep your blood vessels clear and healthy." },
+                    { title: "Eat More Whole Foods", icon: "fa-carrot", desc: "Eat more vegetables, whole grains, and lean proteins. Cut out sugary drinks and processed sweets to help keep your blood sugar steady." },
+                    { title: "Practice Stress Relief", icon: "fa-spa", desc: "High stress can raise your blood pressure. Take 10 minutes before bed to practice quiet breathing or relaxation exercises." },
+                    { title: "Re-check Every Week", icon: "fa-clock-rotate-left", desc: "Take a new test in the Health Prediction tab once a week to see if your numbers are improving." }
+                ];
+            } 
+            // ==========================================================================
+            // CASE 3: LOW RISK (Score < 30%)
+            // ==========================================================================
+            else {
+                alertHTML = `
+                    <div class="risk-alert alert-low">
+                        <i class="fa-solid fa-circle-check" style="font-size: 1.5rem;"></i>
+                        <div>
+                            <strong>Healthy Results (Low Risk - ${score}%):</strong> 
+                            All your main health numbers (Heart Rate, Blood Pressure, SpO2) are in a safe, healthy zone. Keep up your great daily habits!
+                        </div>
+                    </div>`;
+
+                prescriptions = [
+                    { title: "Stay Active Daily", icon: "fa-shield-heart", color: "color-green", desc: "Keep up your regular active lifestyle. Try to hit around 10,000 steps each day to keep your heart muscle strong." },
+                    { title: "Eat Healthy Foods & Nuts", icon: "fa-seedling", desc: "Continue eating whole grains, nuts, and healthy fats (like fish or seeds). This helps keep your blood vessels smooth and clear long-term." },
+                    { title: "Keep Up Yearly Checkups", icon: "fa-droplet", desc: "Your blood sugar looks well-balanced. Keep up your good health by getting a routine yearly checkup with your family doctor." },
+                    { title: "Check In Monthly", icon: "fa-robot", desc: "Run a quick checkup in the app once a month or after major lifestyle changes to keep your healthy streak on record." }
+                ];
+            }
+
+            alertContainer.innerHTML = alertHTML;
+            recGrid.innerHTML = "";
+            
+            prescriptions.forEach(card => {
+                recGrid.innerHTML += `
+                    <div class="rec-card">
+                        <i class="fa-solid ${card.icon} ${card.color || 'color-blue'}"></i>
+                        <h3 style="font-size: 1.1rem; font-weight:700; color: #0f172a; margin-bottom:0.5rem;">${card.title}</h3>
+                        <p style="color: var(--text-muted); font-size:0.88rem; line-height:1.5;">${card.desc}</p>
+                    </div>`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Portal - HealthPredict AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-page profile-page">
+    <div class="dashboard-wrapper">
+        
+        <!-- ==========================================
+             UNIVERSAL SIDEBAR (CONNECTED TO ALL PAGES)
+             ========================================== -->
+        <aside class="sidebar">
+            <a href="index.html" class="sidebar-brand-link" id="brandLink">
+                <div class="sidebar-brand">
+                    <div class="logo-circle"><i class="fa-solid fa-notes-medical"></i></div>
+                    <div class="brand-info">
+                        <h2>Predictive</h2>
+                        <h3>Healthcare Analysis</h3>
+                    </div>
+                </div>
+            </a>
+            
+            <nav class="sidebar-menu">
+                <!-- Links to other pages -->
+                <a href="dashboard.html" class="menu-item"><i class="fa-solid fa-grid-2"></i> <span class="nav-text">Dashboard</span></a>
+                <a href="heart-prediction.html" class="menu-item"><i class="fa-solid fa-user-doctor"></i> <span class="nav-text">Health Prediction</span></a>
+                <a href="my-history.html" class="menu-item"><i class="fa-solid fa-clock-rotate-left"></i> <span class="nav-text">My History</span></a>
+                <a href="health-records.html" class="menu-item"><i class="fa-solid fa-folder-medical"></i> <span class="nav-text">Health Records</span></a>
+                <a href="charts-trends.html" class="menu-item"><i class="fa-solid fa-chart-line"></i> <span class="nav-text">Charts & Trends</span></a>
+                <a href="recommendations.html" class="menu-item"><i class="fa-solid fa-heart-circle-check"></i> <span class="nav-text">Recommendations</span></a>
+                
+                <!-- ACTIVE CLASS is on Profile Settings for this specific page -->
+                <a href="profile-settings.html" class="menu-item active"><i class="fa-solid fa-gear"></i> <span class="nav-text">Patient Profile</span></a>
+                
+                <a href="index.html" class="menu-item logout-btn"><i class="fa-solid fa-arrow-right-from-bracket"></i> <span class="nav-text">Logout</span></a>
+            </nav>
+        </aside>
+
+        <!-- ==========================================
+             MAIN CONTENT: HOSPITAL PATIENT RECORD
+             ========================================== -->
+        <main class="main-content">
+            <header class="content-header">
+                <div class="user-greeting">
+                    <h1>Patient Record</h1>
+                    <p>Manage your clinical demographics, vitals, and insurance details securely.</p>
+                </div>
+                <div class="header-actions">
+                    <div class="noti-bell">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="badge">1</span>
+                    </div>
+                    <div class="profile-avatar">
+                        <img src="https://i.pravatar.cc/100?img=32" alt="Profile Image" id="topAvatar">
+                        <span class="profile-name">Patient <i class="fa-solid fa-chevron-down"></i></span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="clinical-portal-container">
+                
+                <div class="patient-master-card">
+    
+                    <div class="patient-master-info">
+                        <img id="settingsAvatar" src="https://i.pravatar.cc/150?img=32" alt="Patient Avatar" class="patient-master-avatar">
+                        <div class="patient-master-details">
+                            <div class="mrn-badge">MRN: #HP-2026-9921</div>
+                            <h2 id="displayName">Patient Name</h2>
+                            <ul class="patient-quick-stats">
+                                <!-- DYNAMIC DOB & AGE SPAN -->
+                                <li><i class="fa-regular fa-calendar"></i> <span id="displayDOB">DOB: -- (--)</span></li>
+                                <!-- DYNAMIC SEX SPAN -->
+                                <li><i class="fa-solid fa-venus-mars"></i> Sex: <span id="displaySex">Male</span></li>
+                                <!-- INDIAN PHONE NUMBER DISPLAY -->
+                                <li><i class="fa-solid fa-phone"></i> <span id="displayPhone">+91 98765 43210</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="patient-master-actions" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        
+                        <button type="button" class="btn-clinical-outline btn-google-sync" id="syncBtn" onclick="handleGoogleSync()">
+                            <i class="fa-brands fa-google"></i> Sync Profile with Email
+                        </button>
+                        
+                        <label for="desktopPhotoUpload" class="btn-clinical-outline" style="cursor: pointer; margin: 0;">
+                            <i class="fa-solid fa-upload"></i> Upload Photo
+                        </label>
+                        <input type="file" id="desktopPhotoUpload" accept="image/*" style="display: none;">
+
+                        <button class="btn-clinical-primary" id="saveProfileBtn">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Updates
+                        </button>
+                        
+                    </div>
+                </div>
+
+                <!-- Structured Clinical Forms Grid -->
+                <form id="clinicalProfileForm" class="clinical-cards-layout">
+                    
+                    <!-- Left Column -->
+                    <div class="clinical-column">
+                        <!-- Demographics Card -->
+                        <div class="clinical-data-card">
+                            <div class="card-ribbon"></div>
+                            <div class="card-header">
+                                <h3><i class="fa-regular fa-id-card"></i> Demographics</h3>
+                            </div>
+                            <div class="card-body grid-2">
+                                <div class="form-group full-width">
+                                    <label>Legal Full Name</label>
+                                    <input type="text" id="profileName" class="clinical-input" placeholder="e.g. John Doe">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Primary Email</label>
+                                    <input type="email" id="profileEmail" class="clinical-input" placeholder="e.g. patient@email.com">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date of Birth</label>
+                                    <input type="date" id="profileDOB" class="clinical-input" value="1990-05-16">
+                                </div>
+                                <div class="form-group">
+                                    <label>Biological Sex</label>
+                                    <select id="profileSex" class="clinical-input">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Insurance Card -->
+                        <div class="clinical-data-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-shield-heart"></i> Insurance Details</h3>
+                            </div>
+                            <div class="card-body grid-2">
+                                <div class="form-group full-width">
+                                    <label>Primary Provider</label>
+                                    <input type="text" class="clinical-input" placeholder="e.g. Star Health / BlueCross">
+                                </div>
+                                <div class="form-group">
+                                    <label>Policy Number</label>
+                                    <input type="text" class="clinical-input" placeholder="XXX-XXXXX-XX">
+                                </div>
+                                <div class="form-group">
+                                    <label>Group Number</label>
+                                    <input type="text" class="clinical-input" placeholder="XXXXXX">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="clinical-column">
+                        <!-- Clinical Vitals Card -->
+                        <div class="clinical-data-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-notes-medical"></i> Medical Information</h3>
+                            </div>
+                            <div class="card-body grid-2">
+                                <div class="form-group">
+                                    <label>Blood Type</label>
+                                    <select id="bloodType" class="clinical-input">
+                                        <option value="" disabled selected>Unknown</option>
+                                        <option value="O+">O+</option><option value="A+">A+</option>
+                                        <option value="B+">B+</option><option value="AB+">AB+</option>
+                                        <option value="O-">O-</option><option value="A-">A-</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Height (cm)</label>
+                                    <input type="number" class="clinical-input" placeholder="e.g. 175">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Known Allergies</label>
+                                    <input type="text" class="clinical-input" placeholder="e.g. Penicillin, Peanuts, None" value="None">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label>Chronic Conditions</label>
+                                    <input type="text" class="clinical-input" placeholder="e.g. Hypertension, Asthma" value="N/A">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Contact Card -->
+                        <div class="clinical-data-card alert-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-truck-medical"></i> Emergency Contact</h3>
+                            </div>
+                            <div class="card-body grid-2">
+                                <div class="form-group full-width">
+                                    <label>Contact Name</label>
+                                    <input type="text" class="clinical-input" placeholder="Full Name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Relationship</label>
+                                    <select class="clinical-input">
+                                        <option>Spouse</option>
+                                        <option>Parent</option>
+                                        <option>Sibling</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <!-- UPDATED INDIAN PHONE PLACEHOLDER -->
+                                    <input type="tel" id="emergencyPhone" class="clinical-input" placeholder="+91 98765 00000">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+        async function loadProfile() {
+            try {
+                // Fetching from backend API if available
+                const response = await fetch('http://localhost:5001/api/get-profile');
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    document.querySelector('.brand-info h2').textContent = data.name;
+                    document.querySelector('.user-greeting p').innerHTML = `Clinical overview for: <span class="username-highlight">${data.name}</span>`;
+                    
+                    const apiBtn = document.querySelector('.btn-danger, .api-error-btn');
+                    if(apiBtn) {
+                        apiBtn.className = 'btn-primary';
+                        apiBtn.innerHTML = '<i class="fa-solid fa-check"></i> API Connected';
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading profile from API:", error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProfile);
+
+        // --- GOOGLE SYNC LOGIC ---
+        function handleGoogleSync() {
+            google.accounts.id.initialize({
+                client_id: "66445890031-ftlfc1mu9g84josa1ud0cu2nf97ndgfg.apps.googleusercontent.com",
+                callback: handleCredentialResponse
+            });
+            
+            google.accounts.id.prompt();
+        }
+
+        function handleCredentialResponse(response) {
+            const responsePayload = decodeJwtResponse(response.credential);
+
+            document.getElementById("profileName").value = responsePayload.name;
+            document.getElementById("profileEmail").value = responsePayload.email;
+            document.getElementById("settingsAvatar").src = responsePayload.picture;
+            document.getElementById("displayName").textContent = responsePayload.name;
+            
+            // Persist synced info to browser storage
+            localStorage.setItem('userName', responsePayload.name);
+            localStorage.setItem('userEmail', responsePayload.email);
+            localStorage.setItem('userPhoto', responsePayload.picture);
+            
+            if (typeof updateUI === 'function') {
+                updateUI(responsePayload.name, responsePayload.picture, responsePayload.email);
+            }
+
+            alert("Profile successfully synced with your email!");
+        }
+
+        function decodeJwtResponse(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+    </script>
+    <script src="script.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>

@@ -1,0 +1,2 @@
+# AI-Heart-Prediction
+Predictive Healthcare Analysis is an AI-powered web application that predicts the risk of heart disease using Machine Learning. The project is designed to help users assess their heart health by analyzing various medical parameters and providing an instant prediction along with personalized health recommendations. The application combines Artificial Intelligence, web technologies, and data visualization to create an interactive healthcare platform.

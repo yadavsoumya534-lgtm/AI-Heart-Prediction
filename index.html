@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthPredict AI - Sign In</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        #googleButtonContainer {
+            width: 100%;
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+        }
+        #googleButtonContainer iframe {
+            width: 100% !important;
+            max-width: 400px !important; /* Matches max width of standard form inputs */
+            height: 48px !important;     /* Matches Login button height */
+            border-radius: 8px !important;
+        }
+    </style>
+</head>
+<body class="auth-page">
+
+    <div class="container">
+        <main class="login-section">
+            <div class="brand">
+                <div class="logo-container">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="#4F46E5"/>
+                        <path d="M12 7v10M7 12h10" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>HealthPredict <span>AI</span></h1>
+                    <p>AI-Powered Healthcare</p>
+                </div>
+            </div>
+
+            <div class="intro-text">
+                <h2>Predictive <span>Healthcare Analysis</span></h2>
+                <p>Leveraging AI and Big Data to Predict, Prevent and Personalize Your Health.</p>
+            </div>
+
+            <div class="welcome-box">
+                <h3>Welcome Back!</h3>
+                <p>Sign in to continue to your account</p>
+            </div>
+
+            <form class="login-form" action="dashboard.html" method="GET">
+                <div class="input-group">
+                    <span class="input-icon"><i class="fa-regular fa-envelope"></i></span>
+                    <input type="email" placeholder="Email Address" required>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" placeholder="Password" required>
+                    <span class="toggle-password"><i class="fa-regular fa-eye-slash"></i></span>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-pass">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    Login <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+
+            <div class="divider"><span>OR</span></div>
+
+            <button class="btn-alt-login">
+                <i class="fa-regular fa-user"></i> Login as Patient / User
+            </button>
+
+            <div id="googleButtonContainer"></div>
+
+            <p class="signup-prompt">Don't have an account? <a href="signup.html">Sign Up</a></p>
+        </main>
+
+        <section class="dashboard-section">
+            <div class="grid-overlay"></div>
+            
+            <div class="widget-col left-col">
+                <div class="widget card-glow">
+                    <div class="widget-header">
+                        <h4>Heart Disease Risk</h4>
+                        <span class="wave-icon">〰</span>
+                    </div>
+                    <div class="widget-body">
+                        <div class="stat-row">
+                            <i class="fa-solid fa-heart pulse-heart"></i>
+                            <div>
+                                <span class="stat-percentage">35%</span>
+                                <span class="stat-label yellow">Moderate Risk</span>
+                            </div>
+                        </div>
+                        <div class="sparkline">
+                            <svg viewBox="0 0 100 30" class="sparkline-svg">
+                                <path d="M0,25 Q15,5 30,20 T60,10 T90,22 T100,15" fill="none" stroke="#ff4b72" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget card-glow">
+                    <div class="widget-header">
+                        <h4>Diabetes Risk</h4>
+                        <span class="wave-icon">〰</span>
+                    </div>
+                    <div class="widget-body">
+                        <div class="stat-row">
+                            <i class="fa-solid fa-droplet water-drop"></i>
+                            <div>
+                                <span class="stat-percentage">22%</span>
+                                <span class="stat-label green">Low Risk</span>
+                            </div>
+                        </div>
+                        <div class="sparkline">
+                            <svg viewBox="0 0 100 30" class="sparkline-svg">
+                                <path d="M0,15 Q20,25 40,10 T80,20 T100,5" fill="none" stroke="#00d2ff" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget card-glow">
+                    <div class="widget-header">
+                        <h4>Stroke Risk</h4>
+                        <span class="wave-icon">〰</span>
+                    </div>
+                    <div class="widget-body">
+                        <div class="stat-row">
+                            <i class="fa-solid fa-brain brain-glow"></i>
+                            <div>
+                                <span class="stat-percentage">18%</span>
+                                <span class="stat-label green">Low Risk</span>
+                            </div>
+                        </div>
+                        <div class="sparkline">
+                            <svg viewBox="0 0 100 30" class="sparkline-svg">
+                                <path d="M0,20 Q10,10 30,25 T70,12 T100,18" fill="none" stroke="#00ffcc" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="center-visualizer">
+                <div class="radar-floor"></div>
+                <img src="body.jpg.jpeg" class="human-silhouette" alt="Human Body Silhouette">
+            </div>
+
+            <div class="widget-col right-col">
+                <div class="widget card-glow">
+                    <div class="widget-header">
+                        <h4>Health Prediction</h4>
+                        <span class="wave-icon">📊</span>
+                    </div>
+                    <div class="radial-container">
+                        <svg viewBox="0 0 100 100" class="radial-progress">
+                            <circle class="bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="prog" cx="50" cy="50" r="40" style="stroke-dashoffset: 70;"></circle>
+                        </svg>
+                        <div class="radial-text">
+                            <span class="radial-num">72%</span>
+                            <span class="radial-lbl">Overall Score</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget card-glow">
+                    <div class="widget-header">
+                        <h4>Health Insights</h4>
+                        <span class="wave-icon">〰</span>
+                    </div>
+                    <div class="insights-list">
+                        <div class="insight-item">
+                            <i class="fa-solid fa-heart-pulse text-pink"></i>
+                            <span class="insight-name">Blood Pressure</span>
+                            <span class="status-pill green-text">Normal</span>
+                        </div>
+                        <div class="insight-item">
+                            <i class="fa-solid fa-droplet text-orange"></i>
+                            <span class="insight-name">Cholesterol</span>
+                            <span class="status-pill orange-text">Borderline</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget card-glow">
+                    <div class="widget-header">
+                        <h4>Data Analysis</h4>
+                    </div>
+                    <div class="bar-chart-container">
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 35%"></div>
+                            <div class="bar" style="height: 45%"></div>
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 50%"></div>
+                            <div class="bar" style="height: 75%"></div>
+                        </div>
+                        <div class="loading-tracker">
+                            <span class="load-text">Analyzing...</span>
+                            <span class="load-pct" id="livePct">89%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill" style="width: 89%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="features-footer">
+        <div class="feature-card">
+            <div class="feat-icon-box purple-bg"><i class="fa-solid fa-shield-halved"></i></div>
+            <div>
+                <h5>AI-Powered Predictions</h5>
+                <p>Advanced machine learning for accurate predictions</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feat-icon-box blue-bg"><i class="fa-solid fa-database"></i></div>
+            <div>
+                <h5>Big Data Analytics</h5>
+                <p>Process health metrics securely</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feat-icon-box green-bg"><i class="fa-regular fa-circle-check"></i></div>
+            <div>
+                <h5>Early Detection</h5>
+                <p>Identify risks before they become critical</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="feat-icon-box pink-bg"><i class="fa-regular fa-user"></i></div>
+            <div>
+                <h5>Personalized Healthcare</h5>
+                <p>Customized insights and recommendations</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</body>
+</html>
